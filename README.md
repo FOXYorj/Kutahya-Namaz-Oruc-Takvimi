@@ -2,6 +2,8 @@
 
 Bu proje, **Kütahya ve ilçeleri için namaz vakitlerini ve Ramazan’a kalan süreyi** gösteren, siyah neon temalı bir web uygulamasıdır. Ayrıca bildirim sistemi sayesinde kullanıcı, test veya namaz vakti bildirimleri alabilir.
 
+----- YAKINDA TÜM TÜRKİYEDE'DEKİ BÜTÜN İLLER VE İLÇELER VERSYONU GELECEKTİR -----
+
 ---
 
 ## Özellikler
@@ -29,5 +31,3 @@ Bu proje, **Kütahya ve ilçeleri için namaz vakitlerini ve Ramazan’a kalan s
 
 ```bash
 git clone https://github.com/FOXYorj/KutahyaNamazOrucTakvimi.git
-
- -Yakında TÜM TÜRKİYEDEKİ İLLER VE İLÇELER VERSYONU GELECEKTİR -
