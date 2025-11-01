@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kütahya Namaz & Oruç Takvimi</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #000000, #121212);
+    color: #f1f1f1;
+    text-align: center;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  header h1 {
+    font-size: 26px;
+    color: #00ffcc;
+    margin-bottom: 5px;
+  }
+
+  select, button {
+    padding: 10px 14px;
+    margin: 10px 5px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background: #1a1a1a;
+    color: #fff;
+    font-size: 15px;
+    cursor: pointer;
+  }
+
+  button {
+    background: #00ffcc;
+    color: #000;
+    font-weight: bold;
+  }
+
+  button:hover { background: #00c8a3; }
+
+  .card {
+    background: #1a1a1a;
+    margin: 20px auto;
+    padding: 20px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 0 20px rgba(0,255,204,0.2);
+    text-align: left;
+  }
+
+  .time { margin: 8px 0; font-size: 18px; }
+  .highlight { color: #00ffcc; font-weight: bold; }
+  #countdown { font-size: 20px; text-align: center; margin-top: 10px; }
+
+  footer {
+    margin-top: 30px;
+    background: #0b0b0b;
+    padding: 20px 10px;
+    font-size: 14px;
+  }
+
+  .github-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #00ffcc;
+    color: #000;
+    border-radius: 25px;
+    padding: 10px 18px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: 0.3s;
+  }
+
+  .github-link:hover { background: #00c8a3; }
+
+  .github-link img {
+    width: 20px;
+    margin-right: 8px;
+  }
+
+  @media (max-width: 600px) {
+    h1 { font-size: 22px; }
+    .card { width: 95%; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>🕌 Kütahya Namaz & Oruç Takvimi</h1>
+  <label for="district">İlçe Seç:</label>
+  <select id="district">
+    <option value="Kütahya Merkez">Kütahya Merkez</option>
+    <option value="Tavşanlı">Tavşanlı</option>
+    <option value="Simav">Simav</option>
+    <option value="Gediz">Gediz</option>
+    <option value="Emet">Emet</option>
+    <option value="Domaniç">Domaniç</option>
+    <option value="Altıntaş">Altıntaş</option>
+    <option value="Aslanapa">Aslanapa</option>
+    <option value="Pazarlar">Pazarlar</option>
+    <option value="Dumlupınar">Dumlupınar</option>
+    <option value="Hisarcık">Hisarcık</option>
+    <option value="Şaphane">Şaphane</option>
+    <option value="Çavdarhisar">Çavdarhisar</option>
+  </select>
+  <button onclick="getTimes()">Vakitleri Göster</button>
+</header>
+
+<div id="times"></div>
+<div id="countdown"></div>
+
+<footer>
+  <p>Bu site <strong>SlayerVoxy</strong> tarafından geliştirilmiştir.</p>
+  <a class="github-link" href="https://github.com/FOXYorj" target="_blank">
+    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub"> Diğer projelere göz at
+  </a>
+</footer>
+
+<script>
+async function getTimes() {
+  const district = document.getElementById("district").value;
+  document.getElementById("times").innerHTML = "<p>⏳ Veriler yükleniyor...</p>";
+
+  try {
+    const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(district)}&country=Turkey&method=13`);
+    const data = await res.json();
+    if (!data.data) throw new Error("Veri alınamadı");
+
+    const t = data.data.timings;
+    const today = new Date().toLocaleDateString("tr-TR");
+
+    document.getElementById("times").innerHTML = `
+      <div class="card">
+        <div class="highlight">${district} - ${today}</div>
+        <div class="time">🌅 İmsak: ${t.Fajr}</div>
+        <div class="time">🌇 Güneş: ${t.Sunrise}</div>
+        <div class="time">🕛 Öğle: ${t.Dhuhr}</div>
+        <div class="time">🌆 İkindi: ${t.Asr}</div>
+        <div class="time">🌄 Akşam: ${t.Maghrib}</div>
+        <div class="time">🌙 Yatsı: ${t.Isha}</div>
+      </div>
+    `;
+
+    // Ramazan geri sayımı (18 Şubat 2026)
+    const ramazan = new Date("2026-02-18T00:00:00");
+    function updateCountdown() {
+      const now = new Date();
+      let diff = ramazan - now;
+      if (diff <= 0) {
+        document.getElementById("countdown").innerHTML = "<span class='highlight'>Oruç başladı!</span>";
+        return;
+      }
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((diff / (1000 * 60)) % 60);
+      const seconds = Math.floor((diff / 1000) % 60);
+      document.getElementById("countdown").innerHTML =
+        `Ramazan'a kalan süre: ${days} gün, ${hours} saat, ${minutes} dakika, ${seconds} saniye`;
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+  } catch (err) {
+    document.getElementById("times").innerHTML = "<p style='color:red;'>Veriler alınamadı.</p>";
+    console.error(err);
+  }
+}
+
+// Sayfa yüklendiğinde otomatik verileri al
+getTimes();
+</script>
+</body>
+</html>
