@@ -3,201 +3,1541 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kütahya Namaz & Oruç Takvimi</title>
+<title>Kütahya Namaz Takvimi</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #000000, #121212);
-    color: #f1f1f1;
-    text-align: center;
+  :root {
+    --primary: #2D3250;
+    --secondary: #424769;
+    --accent: #7077A1;
+    --light: #F6B17A;
+    --special: #FF6B8B;
+    --text: #f8f9fa;
+    --bg: #0f1525;
+    --card-bg: rgba(45, 50, 80, 0.7);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --border-radius: 20px;
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  * {
     margin: 0;
-    padding: 20px;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, var(--bg) 0%, #1a1f38 100%);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* Arkaplan dekorasyonu */
+  .bg-pattern {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+      radial-gradient(circle at 20% 80%, rgba(112, 119, 161, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(246, 177, 122, 0.1) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(45, 50, 80, 0.2) 0%, transparent 50%);
+    z-index: -1;
+  }
+
+  /* Ana Konteyner */
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 30px;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
   }
 
-  header h1 {
-    font-size: 26px;
-    color: #00ffcc;
+  /* Header */
+  header {
+    margin-bottom: 40px;
+    text-align: center;
+  }
+
+  .header-content {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .app-title {
+    font-size: 3.2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+    background: linear-gradient(135deg, var(--light) 0%, #ff9a3d 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1.2;
+  }
+
+  .app-subtitle {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 30px;
+    font-weight: 400;
+  }
+
+  /* Kontrol Paneli */
+  .control-panel {
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border-radius: var(--border-radius);
+    padding: 25px;
+    margin-bottom: 40px;
+    border: 1px solid rgba(112, 119, 161, 0.3);
+    box-shadow: var(--shadow);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .district-selector {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .district-selector i {
+    color: var(--light);
+    font-size: 1.3rem;
+  }
+
+  select {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(112, 119, 161, 0.4);
+    border-radius: 12px;
+    padding: 14px 20px;
+    color: var(--text);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23F6B17A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    padding-right: 50px;
+  }
+
+  select:hover, select:focus {
+    background-color: rgba(255, 255, 255, 0.12);
+    border-color: var(--light);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(246, 177, 122, 0.2);
+  }
+
+  .view-toggle {
+    display: flex;
+    gap: 10px;
+  }
+
+  .view-btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background: rgba(255, 255, 255, 0.08);
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .view-btn.active {
+    background: var(--light);
+    color: var(--primary);
+    border-color: var(--light);
+    box-shadow: 0 5px 15px rgba(246, 177, 122, 0.3);
+  }
+
+  .view-btn:not(.active):hover {
+    background: rgba(255, 255, 255, 0.15);
+    border-color: rgba(112, 119, 161, 0.5);
+  }
+
+  .religious-days-btn {
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 2px solid transparent;
+    background: var(--special);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .religious-days-btn:hover {
+    background: #ff4d6d;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 139, 0.3);
+  }
+
+  /* Ana İçerik */
+  .main-content {
+    display: flex;
+    flex: 1;
+    gap: 30px;
+    min-height: 600px;
+  }
+
+  /* Sol Panel - Bugünün Vakitleri */
+  .today-panel {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+  }
+
+  .current-time-card {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+    border-radius: var(--border-radius);
+    padding: 35px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(112, 119, 161, 0.3);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .current-time-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(246, 177, 122, 0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .location-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  .location-header i {
+    font-size: 1.8rem;
+    color: var(--light);
+  }
+
+  .location-info h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
     margin-bottom: 5px;
   }
 
-  select, button {
-    padding: 10px 14px;
-    margin: 10px 5px;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    background: #1a1a1a;
-    color: #fff;
-    font-size: 15px;
-    cursor: pointer;
+  .date-display {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    font-weight: 500;
   }
 
-  button {
-    background: #00ffcc;
-    color: #000;
-    font-weight: bold;
+  .prayer-times-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
   }
 
-  button:hover { background: #00c8a3; }
-
-  .card {
-    background: #1a1a1a;
-    margin: 20px auto;
-    padding: 20px;
+  .prayer-card {
+    background: rgba(255, 255, 255, 0.05);
     border-radius: 16px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 0 20px rgba(0,255,204,0.2);
-    text-align: left;
+    padding: 20px;
+    border-left: 4px solid var(--accent);
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
   }
 
-  .time { margin: 8px 0; font-size: 18px; }
-  .highlight { color: #00ffcc; font-weight: bold; }
-  #countdown { font-size: 20px; text-align: center; margin-top: 10px; }
+  .prayer-card:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  }
 
+  .prayer-card.active {
+    border-left-color: var(--light);
+    background: rgba(246, 177, 122, 0.1);
+  }
+
+  .prayer-card.active::after {
+    content: 'ŞİMDİ';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: var(--light);
+    color: var(--primary);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .prayer-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .prayer-name {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .prayer-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+  }
+
+  .prayer-text h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+  }
+
+  .prayer-text p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .prayer-time {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--light);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Countdown Card */
+  .countdown-card {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 30px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(112, 119, 161, 0.3);
+  }
+
+  .countdown-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+  }
+
+  .countdown-header i {
+    font-size: 2rem;
+    color: var(--light);
+  }
+
+  .countdown-header h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  .countdown-display {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+
+  .countdown-unit {
+    flex: 1;
+    min-width: 120px;
+    text-align: center;
+    padding: 20px 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    border: 1px solid rgba(112, 119, 161, 0.2);
+  }
+
+  .countdown-value {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--light);
+    line-height: 1;
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .countdown-label {
+    font-size: 1rem;
+    color: rgba(255, 255, 255, 0.7);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+  }
+
+  /* Sağ Panel - Takvim */
+  .calendar-panel {
+    flex: 1.5;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    border-radius: var(--border-radius);
+    padding: 35px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(112, 119, 161, 0.3);
+    display: none;
+  }
+
+  .calendar-panel.active {
+    display: block;
+  }
+
+  .calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .calendar-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--light);
+  }
+
+  .calendar-nav {
+    display: flex;
+    gap: 15px;
+  }
+
+  .nav-btn {
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    border: 2px solid rgba(112, 119, 161, 0.4);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .nav-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: var(--light);
+    transform: translateY(-2px);
+  }
+
+  .calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .calendar-weekday {
+    text-align: center;
+    padding: 15px 10px;
+    font-weight: 700;
+    color: var(--light);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    font-size: 1rem;
+  }
+
+  .calendar-day {
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 12px;
+    padding: 15px 10px;
+    min-height: 100px;
+    cursor: pointer;
+    transition: var(--transition);
+    border: 1px solid transparent;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .calendar-day:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(112, 119, 161, 0.3);
+    transform: translateY(-3px);
+  }
+
+  .calendar-day.today {
+    background: rgba(246, 177, 122, 0.15);
+    border-color: var(--light);
+  }
+
+  .calendar-day.other-month {
+    opacity: 0.4;
+    background: transparent;
+  }
+
+  .calendar-day.religious-day {
+    background: rgba(255, 107, 139, 0.1);
+    border-color: rgba(255, 107, 139, 0.3);
+  }
+
+  .calendar-day.religious-day::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    width: 8px;
+    height: 8px;
+    background: var(--special);
+    border-radius: 50%;
+  }
+
+  .calendar-day-number {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: var(--text);
+  }
+
+  .calendar-day.today .calendar-day-number {
+    color: var(--light);
+  }
+
+  .calendar-prayer-times {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .calendar-prayer-times div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 4px;
+  }
+
+  .calendar-prayer-times .time {
+    color: var(--light);
+    font-weight: 600;
+  }
+
+  /* Dini Günler Modal */
+  .religious-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(10px);
+  }
+
+  .religious-modal.active {
+    display: flex;
+  }
+
+  .religious-modal-content {
+    background: var(--card-bg);
+    border-radius: var(--border-radius);
+    padding: 40px;
+    max-width: 800px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    border: 1px solid rgba(112, 119, 161, 0.3);
+    box-shadow: var(--shadow);
+    position: relative;
+  }
+
+  .religious-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(112, 119, 161, 0.3);
+  }
+
+  .religious-modal-header h2 {
+    font-size: 2rem;
+    color: var(--light);
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .close-modal {
+    background: none;
+    border: none;
+    color: var(--light);
+    font-size: 2rem;
+    cursor: pointer;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: var(--transition);
+  }
+
+  .close-modal:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: rotate(90deg);
+  }
+
+  .religious-year-selector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+  }
+
+  .year-btn {
+    background: rgba(255, 255, 255, 0.08);
+    border: 2px solid rgba(112, 119, 161, 0.3);
+    border-radius: 12px;
+    padding: 10px 20px;
+    color: var(--text);
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+
+  .year-btn.active {
+    background: var(--special);
+    border-color: var(--special);
+  }
+
+  .religious-days-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 20px;
+  }
+
+  .religious-day-item {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 16px;
+    padding: 20px;
+    border-left: 4px solid var(--special);
+    transition: var(--transition);
+  }
+
+  .religious-day-item:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-3px);
+  }
+
+  .religious-day-date {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--light);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .religious-day-date i {
+    color: var(--special);
+  }
+
+  .religious-day-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+
+  .religious-day-description {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    line-height: 1.5;
+  }
+
+  /* Footer */
   footer {
-    margin-top: 30px;
-    background: #0b0b0b;
-    padding: 20px 10px;
-    font-size: 14px;
+    margin-top: 50px;
+    padding: 30px 0;
+    text-align: center;
+    border-top: 1px solid rgba(112, 119, 161, 0.3);
+  }
+
+  .developer-info {
+    font-size: 1.1rem;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 20px;
+  }
+
+  .developer-info strong {
+    color: var(--light);
+    font-weight: 700;
   }
 
   .github-link {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    background: #00ffcc;
-    color: #000;
-    border-radius: 25px;
-    padding: 10px 18px;
+    gap: 12px;
+    background: linear-gradient(135deg, var(--accent) 0%, #5a6399 100%);
+    color: white;
     text-decoration: none;
-    font-weight: bold;
-    margin-top: 10px;
-    transition: 0.3s;
+    padding: 15px 30px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: var(--transition);
+    box-shadow: 0 5px 15px rgba(112, 119, 161, 0.3);
   }
 
-  .github-link:hover { background: #00c8a3; }
-
-  .github-link img {
-    width: 20px;
-    margin-right: 8px;
+  .github-link:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(112, 119, 161, 0.4);
+    background: linear-gradient(135deg, #5a6399 0%, var(--accent) 100%);
   }
 
-  @media (max-width: 600px) {
-    h1 { font-size: 22px; }
-    .card { width: 95%; }
+  /* Responsive */
+  @media (max-width: 1200px) {
+    .main-content {
+      flex-direction: column;
+    }
+    
+    .calendar-panel {
+      min-height: 500px;
+    }
+    
+    .religious-days-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px;
+    }
+    
+    .app-title {
+      font-size: 2.5rem;
+    }
+    
+    .control-panel {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    
+    .district-selector {
+      min-width: 100%;
+    }
+    
+    .view-toggle {
+      width: 100%;
+      justify-content: center;
+    }
+    
+    .prayer-times-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .countdown-display {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .countdown-unit {
+      width: 100%;
+      max-width: 200px;
+    }
+    
+    .calendar-grid {
+      gap: 8px;
+    }
+    
+    .calendar-day {
+      min-height: 80px;
+      padding: 10px 5px;
+    }
+    
+    .calendar-prayer-times {
+      font-size: 0.75rem;
+    }
+    
+    .religious-modal-content {
+      padding: 20px;
+      width: 95%;
+    }
+    
+    .religious-modal-header h2 {
+      font-size: 1.5rem;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .app-title {
+      font-size: 2rem;
+    }
+    
+    .control-panel {
+      padding: 20px;
+    }
+    
+    .view-btn, .religious-days-btn {
+      padding: 10px 15px;
+      font-size: 0.9rem;
+    }
+    
+    .calendar-day {
+      min-height: 70px;
+    }
+    
+    .calendar-day-number {
+      font-size: 0.9rem;
+    }
+    
+    .calendar-prayer-times {
+      font-size: 0.7rem;
+    }
+    
+    .religious-days-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Animasyonlar */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .fade-in-up {
+    animation: fadeInUp 0.6s ease forwards;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--accent);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--light);
   }
 </style>
 </head>
 <body>
-<header>
-  <h1>🕌 Kütahya Namaz & Oruç Takvimi</h1>
-  <label for="district">İlçe Seç:</label>
-  <select id="district">
-    <option value="Kütahya Merkez">Kütahya Merkez</option>
-    <option value="Tavşanlı">Tavşanlı</option>
-    <option value="Simav">Simav</option>
-    <option value="Gediz">Gediz</option>
-    <option value="Emet">Emet</option>
-    <option value="Domaniç">Domaniç</option>
-    <option value="Altıntaş">Altıntaş</option>
-    <option value="Aslanapa">Aslanapa</option>
-    <option value="Pazarlar">Pazarlar</option>
-    <option value="Dumlupınar">Dumlupınar</option>
-    <option value="Hisarcık">Hisarcık</option>
-    <option value="Şaphane">Şaphane</option>
-    <option value="Çavdarhisar">Çavdarhisar</option>
-  </select>
-  <button onclick="getTimes()">Vakitleri Göster</button>
-</header>
+  <div class="bg-pattern"></div>
+  
+  <!-- Dini Günler Modal -->
+  <div class="religious-modal" id="religious-modal">
+    <div class="religious-modal-content">
+      <div class="religious-modal-header">
+        <h2><i class="fas fa-star-and-crescent"></i> 2026 Dini Günler</h2>
+        <button class="close-modal" onclick="closeReligiousDays()">×</button>
+      </div>
+      
+      <div class="religious-year-selector">
+        <button class="year-btn" onclick="changeReligiousYear(2025)">2025</button>
+        <button class="year-btn active" onclick="changeReligiousYear(2026)">2026</button>
+        <button class="year-btn" onclick="changeReligiousYear(2027)">2027</button>
+      </div>
+      
+      <div class="religious-days-list" id="religious-days-list">
+        <!-- Dini günler buraya yüklenecek -->
+      </div>
+    </div>
+  </div>
+  
+  <div class="container">
+    <header class="fade-in-up">
+      <div class="header-content">
+        <h1 class="app-title">Kütahya Namaz Takvimi</h1>
+        <p class="app-subtitle">Doğru vakit, huzurlu ibadet için</p>
+      </div>
+    </header>
 
-<div id="times"></div>
-<div id="countdown"></div>
+    <div class="control-panel fade-in-up">
+      <div class="district-selector">
+        <i class="fas fa-map-marker-alt"></i>
+        <select id="district">
+          <option value="Kütahya">Kütahya Merkez</option>
+          <option value="Tavşanlı">Tavşanlı</option>
+          <option value="Simav">Simav</option>
+          <option value="Gediz">Gediz</option>
+          <option value="Emet">Emet</option>
+          <option value="Domaniç">Domaniç</option>
+          <option value="Altıntaş">Altıntaş</option>
+          <option value="Aslanapa">Aslanapa</option>
+          <option value="Pazarlar">Pazarlar</option>
+        </select>
+      </div>
+      
+      <div class="view-toggle">
+        <button class="view-btn active" onclick="showTodayView()">
+          <i class="fas fa-clock"></i> Bugün
+        </button>
+        <button class="view-btn" onclick="showCalendarView()">
+          <i class="fas fa-calendar"></i> Takvim
+        </button>
+        <button class="religious-days-btn" onclick="showReligiousDays()">
+          <i class="fas fa-star-and-crescent"></i> Dini Günler
+        </button>
+      </div>
+    </div>
 
-<footer>
-  <p>Bu site <strong>FOXYorj</strong> tarafından geliştirilmiştir.</p>
-  <a class="github-link" href="https://github.com/FOXYorj" target="_blank">
-    <img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" alt="GitHub"> Diğer projelere göz at
-  </a>
-</footer>
+    <div class="main-content">
+      <div class="today-panel fade-in-up">
+        <div class="current-time-card">
+          <div class="location-header">
+            <i class="fas fa-mosque"></i>
+            <div class="location-info">
+              <h2 id="current-location">Kütahya Merkez</h2>
+              <div class="date-display" id="current-date">15 Şubat 2025, Cumartesi</div>
+            </div>
+          </div>
+          
+          <div class="prayer-times-grid" id="prayer-times">
+            <!-- Namaz vakitleri buraya yüklenecek -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+              <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--light); margin-bottom: 20px;"></i>
+              <p>Namaz vakitleri yükleniyor...</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="countdown-card">
+          <div class="countdown-header">
+            <i class="fas fa-hourglass-half"></i>
+            <h3>Ramazan'a Kalan Süre</h3>
+          </div>
+          
+          <div class="countdown-display">
+            <div class="countdown-unit">
+              <div class="countdown-value" id="days">00</div>
+              <div class="countdown-label">Gün</div>
+            </div>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="hours">00</div>
+              <div class="countdown-label">Saat</div>
+            </div>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="minutes">00</div>
+              <div class="countdown-label">Dakika</div>
+            </div>
+            <div class="countdown-unit">
+              <div class="countdown-value" id="seconds">00</div>
+              <div class="countdown-label">Saniye</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="calendar-panel" id="calendar-panel">
+        <div class="calendar-header">
+          <div class="calendar-title" id="month-year">Şubat 2025</div>
+          <div class="calendar-nav">
+            <button class="nav-btn" onclick="changeMonth(-1)">
+              <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="nav-btn" onclick="changeMonth(1)">
+              <i class="fas fa-chevron-right"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div class="calendar-grid" id="calendar-weekdays">
+          <div class="calendar-weekday">Pz</div>
+          <div class="calendar-weekday">Pt</div>
+          <div class="calendar-weekday">Sa</div>
+          <div class="calendar-weekday">Ça</div>
+          <div class="calendar-weekday">Pe</div>
+          <div class="calendar-weekday">Cu</div>
+          <div class="calendar-weekday">Ct</div>
+        </div>
+        
+        <div class="calendar-grid" id="calendar-days">
+          <!-- Takvim günleri buraya yüklenecek -->
+          <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+            <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--light); margin-bottom: 20px;"></i>
+            <p>Takvim yükleniyor...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="fade-in-up">
+      <div class="developer-info">
+        <p><strong>FOXYorj</strong> tarafından geliştirilmiştir</p>
+      </div>
+      <a href="https://github.com/FOXYorj" target="_blank" class="github-link">
+        <i class="fab fa-github"></i> GitHub'da Diğer Projeler
+      </a>
+    </footer>
+  </div>
 
 <script>
-async function getTimes() {
-  const district = document.getElementById("district").value;
-  document.getElementById("times").innerHTML = "<p>⏳ Veriler yükleniyor...</p>";
+// Global değişkenler
+let currentMonth = new Date().getMonth();
+let currentYear = new Date().getFullYear();
+let currentDistrict = "Kütahya";
+let monthlyPrayerData = {};
+let currentPrayerIndex = -1;
+let religiousDays2026 = [];
+let religiousDays2025 = [];
+let religiousDays2027 = [];
 
+// 2026 Dini Günleri (ATIB verilerine göre)
+religiousDays2026 = [
+  { date: "01 Ocak 2026", name: "Yılbaşı", description: "Miladi yılın ilk günü" },
+  { date: "18 Şubat 2026", name: "Ramazan'ın Başlangıcı", description: "Ramazan ayının ilk günü" },
+  { date: "19 Mart 2026", name: "Kadir Gecesi", description: "Kur'an-ı Kerim'in indirilmeye başlandığı gece" },
+  { date: "20 Mart 2026", name: "Ramazan Bayramı (1. Gün)", description: "Ramazan Bayramı'nın birinci günü" },
+  { date: "21 Mart 2026", name: "Ramazan Bayramı (2. Gün)", description: "Ramazan Bayramı'nın ikinci günü" },
+  { date: "22 Mart 2026", name: "Ramazan Bayramı (3. Gün)", description: "Ramazan Bayramı'nın üçüncü günü" },
+  { date: "09 Haziran 2026", name: "Arefe Günü", description: "Kurban Bayramı'ndan önceki gün" },
+  { date: "10 Haziran 2026", name: "Kurban Bayramı (1. Gün)", description: "Kurban Bayramı'nın birinci günü" },
+  { date: "11 Haziran 2026", name: "Kurban Bayramı (2. Gün)", description: "Kurban Bayramı'nın ikinci günü" },
+  { date: "12 Haziran 2026", name: "Kurban Bayramı (3. Gün)", description: "Kurban Bayramı'nın üçüncü günü" },
+  { date: "13 Haziran 2026", name: "Kurban Bayramı (4. Gün)", description: "Kurban Bayramı'nın dördüncü günü" },
+  { date: "01 Temmuz 2026", name: "Hicri Yılbaşı", description: "1448 Hicri yılının başlangıcı" },
+  { date: "10 Temmuz 2026", name: "Aşure Günü", description: "Muharrem ayının 10. günü" },
+  { date: "29 Ağustos 2026", name: "Mevlid Kandili", description: "Peygamberimizin doğum günü" },
+  { date: "06 Ekim 2026", name: "Regaib Kandili", description: "Receb ayının ilk cuma gecesi" },
+  { date: "03 Kasım 2026", name: "Miraç Kandili", description: "Peygamberimizin Miraç'a yükseldiği gece" },
+  { date: "02 Aralık 2026", name: "Berat Kandili", description: "Şaban ayının 15. gecesi" }
+];
+
+// 2025 Dini Günleri
+religiousDays2025 = [
+  { date: "01 Ocak 2025", name: "Yılbaşı", description: "Miladi yılın ilk günü" },
+  { date: "01 Mart 2025", name: "Ramazan'ın Başlangıcı", description: "Ramazan ayının ilk günü" },
+  { date: "27 Mart 2025", name: "Kadir Gecesi", description: "Kur'an-ı Kerim'in indirilmeye başlandığı gece" },
+  { date: "30 Mart 2025", name: "Ramazan Bayramı (1. Gün)", description: "Ramazan Bayramı'nın birinci günü" },
+  { date: "31 Mart 2025", name: "Ramazan Bayramı (2. Gün)", description: "Ramazan Bayramı'nın ikinci günü" },
+  { date: "01 Nisan 2025", name: "Ramazan Bayramı (3. Gün)", description: "Ramazan Bayramı'nın üçüncü günü" },
+  { date: "06 Haziran 2025", name: "Arefe Günü", description: "Kurban Bayramı'ndan önceki gün" },
+  { date: "07 Haziran 2025", name: "Kurban Bayramı (1. Gün)", description: "Kurban Bayramı'nın birinci günü" },
+  { date: "08 Haziran 2025", name: "Kurban Bayramı (2. Gün)", description: "Kurban Bayramı'nın ikinci günü" },
+  { date: "09 Haziran 2025", name: "Kurban Bayramı (3. Gün)", description: "Kurban Bayramı'nın üçüncü günü" },
+  { date: "10 Haziran 2025", name: "Kurban Bayramı (4. Gün)", description: "Kurban Bayramı'nın dördüncü günü" },
+  { date: "20 Haziran 2025", name: "Hicri Yılbaşı", description: "1447 Hicri yılının başlangıcı" },
+  { date: "29 Haziran 2025", name: "Aşure Günü", description: "Muharrem ayının 10. günü" },
+  { date: "17 Eylül 2025", name: "Mevlid Kandili", description: "Peygamberimizin doğum günü" },
+  { date: "24 Ekim 2025", name: "Regaib Kandili", description: "Receb ayının ilk cuma gecesi" },
+  { date: "21 Kasım 2025", name: "Miraç Kandili", description: "Peygamberimizin Miraç'a yükseldiği gece" },
+  { date: "20 Aralık 2025", name: "Berat Kandili", description: "Şaban ayının 15. gecesi" }
+];
+
+// 2027 Dini Günleri
+religiousDays2027 = [
+  { date: "01 Ocak 2027", name: "Yılbaşı", description: "Miladi yılın ilk günü" },
+  { date: "07 Şubat 2027", name: "Ramazan'ın Başlangıcı", description: "Ramazan ayının ilk günü" },
+  { date: "08 Mart 2027", name: "Kadir Gecesi", description: "Kur'an-ı Kerim'in indirilmeye başlandığı gece" },
+  { date: "09 Mart 2027", name: "Ramazan Bayramı (1. Gün)", description: "Ramazan Bayramı'nın birinci günü" },
+  { date: "10 Mart 2027", name: "Ramazan Bayramı (2. Gün)", description: "Ramazan Bayramı'nın ikinci günü" },
+  { date: "11 Mart 2027", name: "Ramazan Bayramı (3. Gün)", description: "Ramazan Bayramı'nın üçüncü günü" },
+  { date: "28 Mayıs 2027", name: "Arefe Günü", description: "Kurban Bayramı'ndan önceki gün" },
+  { date: "29 Mayıs 2027", name: "Kurban Bayramı (1. Gün)", description: "Kurban Bayramı'nın birinci günü" },
+  { date: "30 Mayıs 2027", name: "Kurban Bayramı (2. Gün)", description: "Kurban Bayramı'nın ikinci günü" },
+  { date: "31 Mayıs 2027", name: "Kurban Bayramı (3. Gün)", description: "Kurban Bayramı'nın üçüncü günü" },
+  { date: "01 Haziran 2027", name: "Kurban Bayramı (4. Gün)", description: "Kurban Bayramı'nın dördüncü günü" },
+  { date: "20 Haziran 2027", name: "Hicri Yılbaşı", description: "1449 Hicri yılının başlangıcı" },
+  { date: "29 Haziran 2027", name: "Aşure Günü", description: "Muharrem ayının 10. günü" },
+  { date: "18 Eylül 2027", name: "Mevlid Kandili", description: "Peygamberimizin doğum günü" },
+  { date: "25 Ekim 2027", name: "Regaib Kandili", description: "Receb ayının ilk cuma gecesi" },
+  { date: "22 Kasım 2027", name: "Miraç Kandili", description: "Peygamberimizin Miraç'a yükseldiği gece" },
+  { date: "21 Aralık 2027", name: "Berat Kandili", description: "Şaban ayının 15. gecesi" }
+];
+
+// Sayfa yüklendiğinde
+document.addEventListener('DOMContentLoaded', function() {
+  // İlçe seçimini dinle
+  document.getElementById('district').addEventListener('change', function() {
+    currentDistrict = this.value;
+    document.getElementById('current-location').textContent = this.options[this.selectedIndex].text;
+    getTodayTimes();
+    getMonthlyTimes(currentYear, currentMonth + 1);
+  });
+  
+  // Bugünün tarihini güncelle
+  updateCurrentDate();
+  
+  // İlk verileri yükle
+  getTodayTimes();
+  getMonthlyTimes(currentYear, currentMonth + 1);
+  
+  // Ramazan geri sayımını başlat
+  updateRamadanCountdown();
+  setInterval(updateRamadanCountdown, 1000);
+  
+  // Aktif namazı kontrol et
+  setInterval(checkCurrentPrayer, 60000);
+  checkCurrentPrayer();
+  
+  // Dini günleri yükle
+  loadReligiousDays(2026);
+});
+
+// Bugünün tarihini güncelle
+function updateCurrentDate() {
+  const now = new Date();
+  const options = { 
+    weekday: 'long', 
+    year: 'numeric', 
+    month: 'long', 
+    day: 'numeric' 
+  };
+  document.getElementById('current-date').textContent = now.toLocaleDateString('tr-TR', options);
+}
+
+// Bugünün namaz vakitlerini getir
+async function getTodayTimes() {
+  const district = document.getElementById('district').value;
+  const prayerTimesEl = document.getElementById('prayer-times');
+  
+  prayerTimesEl.innerHTML = `
+    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+      <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--light); margin-bottom: 20px;"></i>
+      <p>Namaz vakitleri yükleniyor...</p>
+    </div>
+  `;
+  
   try {
     const res = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${encodeURIComponent(district)}&country=Turkey&method=13`);
     const data = await res.json();
+    
     if (!data.data) throw new Error("Veri alınamadı");
-
+    
     const t = data.data.timings;
-    const today = new Date().toLocaleDateString("tr-TR");
-
-    document.getElementById("times").innerHTML = `
-      <div class="card">
-        <div class="highlight">${district} - ${today}</div>
-        <div class="time">🌅 İmsak: ${t.Fajr}</div>
-        <div class="time">🌇 Güneş: ${t.Sunrise}</div>
-        <div class="time">🕛 Öğle: ${t.Dhuhr}</div>
-        <div class="time">🌆 İkindi: ${t.Asr}</div>
-        <div class="time">🌄 Akşam: ${t.Maghrib}</div>
-        <div class="time">🌙 Yatsı: ${t.Isha}</div>
+    
+    // Namaz vakitlerini göster
+    const prayers = [
+      { name: "İmsak", time: t.Fajr, icon: "fas fa-moon" },
+      { name: "Güneş", time: t.Sunrise, icon: "fas fa-sun" },
+      { name: "Öğle", time: t.Dhuhr, icon: "fas fa-sun" },
+      { name: "İkindi", time: t.Asr, icon: "fas fa-cloud-sun" },
+      { name: "Akşam", time: t.Maghrib, icon: "fas fa-sunset" },
+      { name: "Yatsı", time: t.Isha, icon: "fas fa-star" }
+    ];
+    
+    let prayerHTML = '';
+    prayers.forEach((prayer, index) => {
+      prayerHTML += `
+        <div class="prayer-card" id="prayer-${index}">
+          <div class="prayer-info">
+            <div class="prayer-name">
+              <div class="prayer-icon">
+                <i class="${prayer.icon}"></i>
+              </div>
+              <div class="prayer-text">
+                <h3>${prayer.name}</h3>
+                <p>Vakit</p>
+              </div>
+            </div>
+            <div class="prayer-time">${prayer.time.substring(0, 5)}</div>
+          </div>
+        </div>
+      `;
+    });
+    
+    prayerTimesEl.innerHTML = prayerHTML;
+    
+  } catch (err) {
+    prayerTimesEl.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ff6b6b;">
+        <i class="fas fa-exclamation-triangle fa-2x" style="margin-bottom: 15px;"></i>
+        <p>Namaz vakitleri yüklenemedi. Lütfen internet bağlantınızı kontrol edin.</p>
       </div>
     `;
-
-    // Ramazan geri sayımı (18 Şubat 2026)
-    const ramazan = new Date("2026-02-18T00:00:00");
-    function updateCountdown() {
-      const now = new Date();
-      let diff = ramazan - now;
-      if (diff <= 0) {
-        document.getElementById("countdown").innerHTML = "<span class='highlight'>Oruç başladı!</span>";
-        sendNotification("Oruç başladı!", "Ramazan başladı, hayırlı olsun!");
-        return;
-      }
-      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-      const minutes = Math.floor((diff / (1000 * 60)) % 60);
-      const seconds = Math.floor((diff / 1000) % 60);
-      document.getElementById("countdown").innerHTML =
-        `Ramazan'a kalan süre: ${days} gün, ${hours} saat, ${minutes} dakika, ${seconds} saniye`;
-    }
-
-    updateCountdown();
-    setInterval(updateCountdown, 1000);
-
-  } catch (err) {
-    document.getElementById("times").innerHTML = "<p style='color:red;'>Veriler alınamadı.</p>";
     console.error(err);
   }
 }
 
-// Bildirim izni ve test bildirimi
-function sendNotification(title, body) {
-  if (Notification.permission === "granted") {
-    new Notification(title, { body: body });
+// Aktif namazı kontrol et
+function checkCurrentPrayer() {
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+  
+  document.querySelectorAll('.prayer-card').forEach(card => {
+    card.classList.remove('active');
+  });
+  
+  currentPrayerIndex = -1;
+}
+
+// Ramazan geri sayımı
+function updateRamadanCountdown() {
+  const ramadanDate = new Date("2026-02-18T00:00:00");
+  const now = new Date();
+  const diff = ramadanDate - now;
+  
+  if (diff <= 0) {
+    document.getElementById('countdown').innerHTML = `
+      <div style="text-align: center; padding: 20px; width: 100%;">
+        <h3 style="color: var(--light); margin-bottom: 10px;">Ramazan Başladı!</h3>
+        <p>Hayırlı Ramazanlar!</p>
+      </div>
+    `;
+    return;
+  }
+  
+  const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+  const minutes = Math.floor((diff / (1000 * 60)) % 60);
+  const seconds = Math.floor((diff / 1000) % 60);
+  
+  document.getElementById('days').textContent = days.toString().padStart(2, '0');
+  document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+  document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+  document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+}
+
+// Aylık namaz vakitlerini getir
+async function getMonthlyTimes(year, month) {
+  const district = document.getElementById('district').value;
+  const calendarDaysEl = document.getElementById('calendar-days');
+  
+  calendarDaysEl.innerHTML = `
+    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+      <i class="fas fa-spinner fa-spin fa-2x" style="color: var(--light); margin-bottom: 20px;"></i>
+      <p>Takvim yükleniyor...</p>
+    </div>
+  `;
+  
+  try {
+    const res = await fetch(`https://api.aladhan.com/v1/calendarByCity?city=${encodeURIComponent(district)}&country=Turkey&method=13&month=${month}&year=${year}`);
+    const data = await res.json();
+    
+    if (!data.data) throw new Error("Takvim verileri alınamadı");
+    
+    // Verileri sakla
+    monthlyPrayerData = {};
+    data.data.forEach(day => {
+      monthlyPrayerData[day.date.gregorian.day] = day.timings;
+    });
+    
+    // Takvimi oluştur
+    generateCalendar(year, month);
+    
+  } catch (err) {
+    calendarDaysEl.innerHTML = `
+      <div style="grid-column: 1/-1; text-align: center; padding: 40px; color: #ff6b6b;">
+        <i class="fas fa-exclamation-triangle fa-2x" style="margin-bottom: 15px;"></i>
+        <p>Takvim verileri yüklenemedi. Lütfen internet bağlantınızı kontrol edin.</p>
+      </div>
+    `;
+    console.error(err);
   }
 }
 
-function requestNotification() {
-  if (!("Notification" in window)) return;
-  Notification.requestPermission().then(permission => {
-    if (permission === "granted") {
-      sendNotification("Test Bildirimi", "Bildirim sistemi çalışıyor! ✅");
+// Takvim oluştur
+function generateCalendar(year, month) {
+  const calendarDaysEl = document.getElementById('calendar-days');
+  const monthYearEl = document.getElementById('month-year');
+  
+  // Ay ve yıl başlığını güncelle
+  const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", 
+                      "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  monthYearEl.textContent = `${monthNames[month-1]} ${year}`;
+  
+  // Ayın ilk gününü ve toplam gün sayısını bul
+  const firstDay = new Date(year, month-1, 1).getDay();
+  const daysInMonth = new Date(year, month, 0).getDate();
+  
+  // Önceki ayın son günlerini bul
+  const prevMonthDays = new Date(year, month-1, 0).getDate();
+  
+  // Bugünün tarihini kontrol et
+  const today = new Date();
+  const isCurrentMonth = today.getMonth()+1 === month && today.getFullYear() === year;
+  
+  // Dini günleri kontrol et
+  const religiousDays = getReligiousDaysForMonth(year, month);
+  
+  let calendarHTML = '';
+  
+  // Önceki ayın son günleri
+  for (let i = firstDay - 1; i >= 0; i--) {
+    const day = prevMonthDays - i;
+    calendarHTML += `
+      <div class="calendar-day other-month">
+        <div class="calendar-day-number">${day}</div>
+      </div>
+    `;
+  }
+  
+  // Bu ayın günleri
+  for (let day = 1; day <= daysInMonth; day++) {
+    const isToday = isCurrentMonth && day === today.getDate();
+    const isReligiousDay = religiousDays.includes(day);
+    let dayClass = "calendar-day";
+    
+    if (isToday) dayClass += " today";
+    if (isReligiousDay) dayClass += " religious-day";
+    
+    let prayerHTML = '';
+    
+    if (monthlyPrayerData[day]) {
+      const t = monthlyPrayerData[day];
+      prayerHTML = `
+        <div class="calendar-prayer-times">
+          <div><span>İmsak:</span> <span class="time">${t.Fajr.substring(0, 5)}</span></div>
+          <div><span>Öğle:</span> <span class="time">${t.Dhuhr.substring(0, 5)}</span></div>
+          <div><span>Akşam:</span> <span class="time">${t.Maghrib.substring(0, 5)}</span></div>
+        </div>
+      `;
     }
-  });
+    
+    calendarHTML += `
+      <div class="${dayClass}" onclick="showDayDetails(${day}, ${month}, ${year})">
+        <div class="calendar-day-number">${day}</div>
+        ${prayerHTML}
+      </div>
+    `;
+  }
+  
+  // Sonraki ayın ilk günleri (toplam 42 hücre için)
+  const totalCells = 42;
+  const cellsUsed = firstDay + daysInMonth;
+  const nextMonthDays = totalCells - cellsUsed;
+  
+  for (let day = 1; day <= nextMonthDays; day++) {
+    calendarHTML += `
+      <div class="calendar-day other-month">
+        <div class="calendar-day-number">${day}</div>
+      </div>
+    `;
+  }
+  
+  calendarDaysEl.innerHTML = calendarHTML;
 }
 
-// Sayfa yüklendiğinde otomatik verileri al ve bildirim izni iste
-window.onload = () => {
-  getTimes();
-  requestNotification();
-};
+// Belirli bir aydaki dini günleri bul
+function getReligiousDaysForMonth(year, month) {
+  const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", 
+                      "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  const monthName = monthNames[month-1];
+  
+  let religiousDays = [];
+  let allReligiousDays;
+  
+  if (year === 2025) allReligiousDays = religiousDays2025;
+  else if (year === 2026) allReligiousDays = religiousDays2026;
+  else if (year === 2027) allReligiousDays = religiousDays2027;
+  else allReligiousDays = [];
+  
+  allReligiousDays.forEach(day => {
+    if (day.date.includes(monthName)) {
+      const dayNumber = parseInt(day.date.split(' ')[0]);
+      if (!isNaN(dayNumber)) {
+        religiousDays.push(dayNumber);
+      }
+    }
+  });
+  
+  return religiousDays;
+}
+
+// Ay değiştirme
+function changeMonth(direction) {
+  currentMonth += direction;
+  
+  if (currentMonth < 0) {
+    currentMonth = 11;
+    currentYear--;
+  } else if (currentMonth > 11) {
+    currentMonth = 0;
+    currentYear++;
+  }
+  
+  getMonthlyTimes(currentYear, currentMonth + 1);
+}
+
+// Gün detaylarını göster
+function showDayDetails(day, month, year) {
+  if (monthlyPrayerData[day]) {
+    const t = monthlyPrayerData[day];
+    const monthNames = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", 
+                        "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+    
+    // Dini günleri kontrol et
+    const religiousDays = getReligiousDaysForMonth(year, month);
+    let religiousInfo = '';
+    
+    if (religiousDays.includes(day)) {
+      let allReligiousDays;
+      if (year === 2025) allReligiousDays = religiousDays2025;
+      else if (year === 2026) allReligiousDays = religiousDays2026;
+      else if (year === 2027) allReligiousDays = religiousDays2027;
+      else allReligiousDays = [];
+      
+      const religiousDay = allReligiousDays.find(d => 
+        d.date.startsWith(day.toString()) && d.date.includes(monthNames[month-1])
+      );
+      
+      if (religiousDay) {
+        religiousInfo = `
+          <div style="margin-top: 20px; padding: 15px; background: rgba(255, 107, 139, 0.1); border-radius: 12px; border-left: 4px solid var(--special);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+              <i class="fas fa-star-and-crescent" style="color: var(--special);"></i>
+              <h4 style="color: var(--special); font-weight: 600;">${religiousDay.name}</h4>
+            </div>
+            <p style="color: rgba(255,255,255,0.8); font-size: 0.9rem;">${religiousDay.description}</p>
+          </div>
+        `;
+      }
+    }
+    
+    const modalHTML = `
+      <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+        <div style="background: var(--card-bg); border-radius: var(--border-radius); padding: 30px; max-width: 500px; width: 90%; border: 1px solid rgba(112, 119, 161, 0.3); box-shadow: var(--shadow);">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="color: var(--light); font-size: 1.5rem;">${day} ${monthNames[month-1]} ${year}</h3>
+            <button onclick="this.parentElement.parentElement.parentElement.remove()" style="background: none; border: none; color: var(--light); font-size: 1.5rem; cursor: pointer;">×</button>
+          </div>
+          <div style="display: grid; gap: 15px;">
+            <div style="display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+              <span>İmsak:</span>
+              <strong style="color: var(--light);">${t.Fajr}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+              <span>Güneş:</span>
+              <strong style="color: var(--light);">${t.Sunrise}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+              <span>Öğle:</span>
+              <strong style="color: var(--light);">${t.Dhuhr}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+              <span>İkindi:</span>
+              <strong style="color: var(--light);">${t.Asr}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+              <span>Akşam:</span>
+              <strong style="color: var(--light);">${t.Maghrib}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px;">
+              <span>Yatsı:</span>
+              <strong style="color: var(--light);">${t.Isha}</strong>
+            </div>
+            ${religiousInfo}
+          </div>
+        </div>
+      </div>
+    `;
+    
+    const modal = document.createElement('div');
+    modal.innerHTML = modalHTML;
+    document.body.appendChild(modal.firstChild);
+  }
+}
+
+// Görünüm değiştirme
+function showTodayView() {
+  document.querySelector('.view-btn.active').classList.remove('active');
+  document.querySelector('.view-btn:nth-child(1)').classList.add('active');
+  document.getElementById('calendar-panel').classList.remove('active');
+  
+  if (window.innerWidth <= 1200) {
+    document.querySelector('.today-panel').style.display = 'flex';
+    document.getElementById('calendar-panel').style.display = 'none';
+  }
+}
+
+function showCalendarView() {
+  document.querySelector('.view-btn.active').classList.remove('active');
+  document.querySelector('.view-btn:nth-child(2)').classList.add('active');
+  document.getElementById('calendar-panel').classList.add('active');
+  
+  if (window.innerWidth <= 1200) {
+    document.querySelector('.today-panel').style.display = 'none';
+    document.getElementById('calendar-panel').style.display = 'block';
+  }
+}
+
+// Dini günleri göster
+function showReligiousDays() {
+  document.getElementById('religious-modal').classList.add('active');
+}
+
+function closeReligiousDays() {
+  document.getElementById('religious-modal').classList.remove('active');
+}
+
+// Dini gün yılı değiştirme
+function changeReligiousYear(year) {
+  document.querySelectorAll('.year-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  event.target.classList.add('active');
+  
+  loadReligiousDays(year);
+}
+
+// Dini günleri yükle
+function loadReligiousDays(year) {
+  const listEl = document.getElementById('religious-days-list');
+  let religiousDays;
+  
+  if (year === 2025) religiousDays = religiousDays2025;
+  else if (year === 2026) religiousDays = religiousDays2026;
+  else if (year === 2027) religiousDays = religiousDays2027;
+  else religiousDays = [];
+  
+  let listHTML = '';
+  
+  religiousDays.forEach(day => {
+    listHTML += `
+      <div class="religious-day-item">
+        <div class="religious-day-date">
+          <i class="fas fa-calendar-day"></i>
+          ${day.date}
+        </div>
+        <div class="religious-day-name">${day.name}</div>
+        <div class="religious-day-description">${day.description}</div>
+      </div>
+    `;
+  });
+  
+  listEl.innerHTML = listHTML;
+}
+
+// Başlangıçta bugün görünümünü göster
+showTodayView();
 </script>
 </body>
 </html>
-
