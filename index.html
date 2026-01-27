@@ -371,7 +371,7 @@ async function callOpenRouter(userText) {
     } catch (error) {
         typing.style.display = 'none';
         console.error("AI Hatası:", error);
-        addMessage(`Üzgünüm bir hata oluştu: ${error.message}. İnternet bağlantınızı kontrol edin.`, 'bot');
+        addMessage(`Üzgünüm bir hata oluştu: ${error.message}. İnternet bağlantınızı kontrol edin.Asistan Bakımdadır Boşuna Mesaj Atmakla Uğraşmayın`, 'bot');
     }
 }
 
@@ -618,4 +618,5 @@ document.getElementById('district').addEventListener('change', function() {
 </script>
 </body>
 </html>
+
 
